@@ -54,7 +54,7 @@ jQuery.fn.labelify = function(settings) {
     el.value = jQuery(el).data("label");
   };
   hideLabel = function(el){
-    el.value = el.defaultValue;
+    el.value = '';
     jQuery(el).removeClass(settings.labeledClass).data('hasLabel', false);
   };
 
@@ -74,7 +74,7 @@ jQuery.fn.labelify = function(settings) {
     $item.bind('focus.label',function() {
       if (this.value === jQuery(this).data("label")) { hideLabel(this); }
     }).bind('blur.label',function(){
-      if (this.value === this.defaultValue) { showLabel(this); }
+      if (this.value === '') { showLabel(this); }
     }).data('label',lookup(this).replace(/\n/g,'')); // strip label's newlines
     
     removeValuesOnExit = function() {
@@ -86,7 +86,7 @@ jQuery.fn.labelify = function(settings) {
     $item.parents("form").submit(removeValuesOnExit);
     jQuery(window).unload(removeValuesOnExit);
     
-    if (this.value !== this.defaultValue) {
+    if (this.value !== '') {
       // user started typing; don't overwrite his/her text!
       return;
     }

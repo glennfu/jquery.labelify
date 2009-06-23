@@ -1,0 +1,7 @@
+- version: 2.0.1
+    - glennfu: renamed '$' to 'jQuery' to avoid conflicts with Prototype
+    - glennfu: swapped order of class adding to remove the flicker
+    - glennfu: default value reverted to is always a blank string
+ 
+- version: 2.0 (original)
+    - Forked from garrett's source
