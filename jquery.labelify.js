@@ -26,17 +26,19 @@ jQuery.fn.labelify = function(settings) {
     return jQuery(this).data('hasLabel');
   }
 
-  settings = jQuery.extend({
+  var showLabel, hideLabel, labeledClass,
+      lookups, lookup,
+      $labelified_elements,
+			$settings;
+
+  $settings = jQuery.extend({
     text: 'title',
     labeledClass: ''
   }, settings);
 
   // Compatibility with version 1.3 and prior (double-ls)
-  if (settings.labelledClass) { settings.labeledClass = settings.labelledClass; }
+  if ($settings.labelledClass) { $settings.labeledClass = $settings.labelledClass; }
 
-  var showLabel, hideLabel,
-      lookups, lookup,
-      $labelified_elements;
 
   lookups = {
     title: function(input) {
@@ -50,22 +52,25 @@ jQuery.fn.labelify = function(settings) {
   $labelified_elements = jQuery(this);
 
   showLabel = function(el){
-    jQuery(el).addClass(settings.labeledClass).data('hasLabel', true);
+    jQuery(el).addClass($settings.labeledClass).data('hasLabel', true);
     el.value = jQuery(el).data("label");
   };
   hideLabel = function(el){
     el.value = '';
-    jQuery(el).removeClass(settings.labeledClass).data('hasLabel', false);
+    jQuery(el).removeClass($settings.labeledClass).data('hasLabel', false);
   };
+	labeledClass = function(el){
+		$settings.labeledClass;
+	}
 
   return jQuery(this).each(function() {
     var $item = jQuery(this),
         removeValuesOnExit;
 
-    if (typeof settings.text === 'string') {
-      lookup = lookups[settings.text]; // what if not there?
+    if (typeof $settings.text === 'string') {
+      lookup = lookups[$settings.text]; // what if not there?
     } else {
-      lookup = settings.text; // what if not a fn?
+      lookup = $settings.text; // what if not a fn?
     }
 
     // bail if lookup isn't a function or if it returns undefined
@@ -95,3 +100,27 @@ jQuery.fn.labelify = function(settings) {
     showLabel(this);
   });
 };
+
+jQuery.fn.extend({
+	serialize: function() {
+		// Find elements currently showing a labelify label
+		var labelified = [];
+		jQuery('input, textarea').each(function() {
+		  if (jQuery(this).labelify('hasLabel')) {
+		    labelified.push(this);
+		  }
+		});
+		
+		// Remove labels
+		jQuery.each(labelified, function() { this.value = ''; });
+
+		// Correctly serialize the form
+		var data = this.serializeArray();
+		
+		// Re-add labels
+		jQuery.each(labelified, function() { this.value = jQuery(this).data("label"); });
+
+		// Send the serialization
+		return jQuery.param(data);
+	}
+});
