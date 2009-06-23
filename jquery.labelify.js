@@ -50,8 +50,8 @@ jQuery.fn.labelify = function(settings) {
   $labelified_elements = jQuery(this);
 
   showLabel = function(el){
-    el.value = jQuery(el).data("label");
     jQuery(el).addClass(settings.labeledClass).data('hasLabel', true);
+    el.value = jQuery(el).data("label");
   };
   hideLabel = function(el){
     el.value = el.defaultValue;
