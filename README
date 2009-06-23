@@ -119,3 +119,29 @@ Why might I not want to use it?
 
 
 -- Stuart Langridge, June 2008
+
+
+Why did you fork the original project?
+
+		1. There were a couple bugs I wanted to fix.
+		2. In the thread Stuart Langridge posted about Labelify
+		   (http://www.kryogenix.org/days/2008/06/25/labelify-add-labels-to-textboxes-with-jquery)
+		   there was a question...
+			  "Great plugin. But if your page submits to itself and re-populates 
+			   the form with the post data (when outputting the HTML), labelify 
+			   still replaces populated fields with the label text.
+
+				 Makes server-side validation a pain :("
+				
+			 The response was...
+			  "Nick: the flaw with having labelify not replace after a submit, 
+			   in your example, is that the user will have no idea what the 
+			   fields mean; there’s no label. Clicking in the textfields does 
+			   show the actual text they entered..."
+			
+			 I completely disagree.  If someone entered a value, and clicked
+			 submit, then they know what the field is for.  Removing it again
+			 is confusing.  My fork simply changes that behavior to always
+			 act on a blank string, and never modify the field if it isn't blank.
+			
+-- Glenn Sidney, June 2009
