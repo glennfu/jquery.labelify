@@ -3,11 +3,11 @@
  * Stuart Langridge, http://www.kryogenix.org/
  * Released into the public domain
  * Date: 25 June 2008
- * Last update: 23 June 2009
+ * Last update: 25 June 2009
  * @author Stuart Langridge
  * @author Garrett LeSage
  * @author Glenn Sidney
- * @version 2.0.1
+ * @version 2.0.3
  */
 
 /**
@@ -102,27 +102,30 @@
 	  });
 	};
 
+	// Rewritten serializeArray to strip out labelify's labels
 	$.fn.extend({
-		serialize: function() {
-			// Find elements currently showing a labelify label
-			var labelified = [];
-			$('input, textarea').each(function() {
-			  if ($(this).labelify('hasLabel')) {
-			    labelified.push(this);
-			  }
-			});
-		
-			// Remove labels
-			$.each(labelified, function() { this.value = ''; });
+		serializeArray: function() {
+			return this.map(function(){
+				return this.elements ? jQuery.makeArray(this.elements) : this;
+			})
+			.filter(function(){
+				return this.name && !this.disabled &&
+					(this.checked || /select|textarea/i.test(this.nodeName) ||
+						/text|hidden|password|search/i.test(this.type));
+			})
+			.map(function(i, elem){
+				// Changes from original start here
+				var j_this = jQuery(this);
+				var val = j_this.labelify('hasLabel') ? '' : j_this.val();
+				// Changes from original end here
 
-			// Correctly serialize the form
-			var data = this.serializeArray();
-		
-			// Re-add labels
-			$.each(labelified, function() { this.value = $(this).data("label"); });
-
-			// Send the serialization
-			return $.param(data);
+				return val == null ? null :
+					jQuery.isArray(val) ?
+						jQuery.map( val, function(val, i){
+							return {name: elem.name, value: val};
+						}) :
+						{name: elem.name, value: val};
+			}).get();
 		}
 	});
 })(jQuery);

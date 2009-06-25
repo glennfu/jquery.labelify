@@ -1,3 +1,5 @@
+- version: 2.0.3
+    - glennfu: re-wrote .serializeArray() instead of .serialize() since it'll catch more use cases for submission
 - version: 2.0.2
     - glennfu: hooked into the .serialize() method so you can submit forms with JS and let labelify clean the form fields
     - glennfu: correctly extended jQuery to avoid conflicts with other JS libraries using function($)
