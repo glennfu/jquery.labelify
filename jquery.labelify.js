@@ -7,7 +7,8 @@
  * @author Stuart Langridge
  * @author Garrett LeSage
  * @author Glenn Sidney
- * @version 2.0.3
+ * @author Tom Holder
+ * @version 2.0.4
  */
 
 /**
@@ -65,6 +66,7 @@
 		}
 
 	  return $(this).each(function() {
+
 	    var $item = $(this),
 	        removeValuesOnExit;
 
@@ -78,14 +80,14 @@
 	    if (typeof lookup !== "function" || !lookup(this)) { return; }
 
 	    $item.bind('focus.label',function() {
-	      if (this.value.replace(/\n/g, "\r") === $(this).data("label")) { hideLabel(this); }
+              if (this.value.replace(/\r|\n/g, "") === $(this).data("label").replace(/\r|\n/g, "")) { hideLabel(this); }
 	    }).bind('blur.label',function(){
 	      if (this.value === '') { showLabel(this); }
-	    }).data('label',lookup(this).replace(/\n/g,'')); // strip label's newlines
+	    }).data('label',lookup(this)); // strip label's newlines
     
 	    removeValuesOnExit = function() {
 	      $labelified_elements.each(function(){
-	        if (this.value.replace(/\n/g, "\r") === $(this).data("label")) { hideLabel(this); }
+	        if (this.value.replace(/\r|\n/g, "") === $(this).data("label").replace(/\r|\n/g, "")) { hideLabel(this); }
 	      });
 	    };
     
